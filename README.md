@@ -13,4 +13,5 @@ Ninebot Max G30(D) (II)
 
 
 ### Supported Patches
-- (sls) Speed limit of Speed Mode
+- (sls-eu) EU Speed limit of Speed Mode
+- (sls-de) DE Speed limit of Speed Mode
