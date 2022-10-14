@@ -6,6 +6,8 @@ This project is based on [Xiaomi NextGen firmware patcher](https://github.com/dn
 
 Usage example: ```python3 patcher.py drv173.bin drv173-patched.bin sls-de,sls-eu```
 
+Download: [Patched DRV173 with SLS of 30 km/h](https://github.com/trueToastedCode/Ninebot-NextGen-Firmware/tree/main/patched/DRV173)
+
 ### Supported Scooter's
 - Ninebot Max G30(D) (II)
 
