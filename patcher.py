@@ -95,7 +95,7 @@ class FirmwarePatcher():
     
     ---> Offset: 6f2e
     """
-    def speed_limit_speed(self, km_h):
+    def speed_limit_speed_eu(self, km_h):
         signature = [0x97, 0xf8, 0x51, None, None, 0x23, 0x4f, 0xf4, 0xfa, 0x5a]
         register = 12
         add_offset = 0xa
@@ -108,7 +108,27 @@ class FirmwarePatcher():
         assert len(pre) == len(post)
         self.data[ofs:ofs + instruction_len] = post
 
-        return "speed_limit_speed", hex(ofs), pre.hex(), post.hex()
+        return "speed_limit_speed_eu", hex(ofs), pre.hex(), post.hex()
+
+    """
+        Almost same as eu (see above)
+        ---> Offset: 6f28
+        """
+
+    def speed_limit_speed_de(self, km_h):
+        signature = [0x97, 0xf8, 0x51, None, None, 0x23, 0x4f, 0xf4, 0xfa, 0x5a]
+        add_offset = 0x4
+        register = (0x23, 3)
+        instruction_len = 2
+
+        ofs = FindPattern(self.data, signature) + add_offset
+        pre = self.data[ofs:ofs + instruction_len]
+        assert pre[-1] == register[0]
+        post = bytes(self.ks.asm('MOVS R{}, #{}'.format(register[1], km_h))[0])
+        assert len(pre) == len(post)
+        self.data[ofs:ofs + instruction_len] = post
+
+        return "speed_limit_speed_de", hex(ofs), pre.hex(), post.hex()
 
 
 if __name__ == "__main__":
@@ -130,7 +150,8 @@ if __name__ == "__main__":
 
     # comment out to deactivate
     patches = {
-        'sls': lambda: patcher.speed_limit_speed(27)
+        'sls-eu': lambda: patcher.speed_limit_speed_eu(27),
+        'sls-de': lambda: patcher.speed_limit_speed_de(27)
     }
 
     for key in patches:

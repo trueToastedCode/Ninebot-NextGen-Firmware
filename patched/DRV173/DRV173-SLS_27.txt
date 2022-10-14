@@ -1,3 +1,5 @@
-speed_limit_speed 0x6f2e 4ff0190c 4ff01b0c
 < mov.w ip, #0x19
 > mov.w ip, #0x1b
+speed_limit_speed_de 0x6f28 1423 1b23
+< movs r3, #0x14
+> movs r3, #0x1b
