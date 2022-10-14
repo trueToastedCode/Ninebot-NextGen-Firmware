@@ -2,15 +2,15 @@
 ### Status: Experimental
 ##### (99% sure everything is ok)
 
-This project is based on [Xiaomi NextGen firmware patcher](https://github.com/dnandha/firmware-patcher) and tries to find the equivalent assembly code & patches found for Xiaomi for Ninebot
+This project is based on [Xiaomi NextGen firmware patcher](https://github.com/dnandha/firmware-patcher) and i've tried to find the equivalent assembly code & patches found for Xiaomi for Ninebot
 
-Example: ```python3 patcher.py drv173.bin drv173-patched.bin sls-de,sls-eu```
+Usage example: ```python3 patcher.py drv173.bin drv173-patched.bin sls-de,sls-eu```
 
-### Scooter's
+### Supported Scooter's
 - Ninebot Max G30(D) (II)
 
-### Supported DRV's
-- 173 (came from [scooterhacking/firmware/max/DRV](https://files.scooterhacking.org/firmware/max/DRV))
+### Supported [DRV's](https://files.scooterhacking.org/firmware/max/DRV)
+- 173
 
 ### Supported Patches
 SLS: Speed limit of Speed Mode
