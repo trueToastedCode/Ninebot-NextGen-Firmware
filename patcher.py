@@ -93,7 +93,7 @@ class FirmwarePatcher():
     00006f2a 4f f4 fa 5a     mov.w      r10,#0x1f40
     00006f2e 4f f0 19 0c     mov.w      r12,#0x19
     
-    ---> Offset: 6f2e
+    ---> Offset: 0x6f2e
     """
     def speed_limit_speed_eu(self, km_h):
         signature = [0x97, 0xf8, 0x51, None, None, 0x23, 0x4f, 0xf4, 0xfa, 0x5a]
@@ -111,9 +111,9 @@ class FirmwarePatcher():
         return "speed_limit_speed_eu", hex(ofs), pre.hex(), post.hex()
 
     """
-        Almost same as eu (see above)
-        ---> Offset: 6f28
-        """
+    Almost same as eu (see above)
+    ---> Offset: 0x6f28
+    """
 
     def speed_limit_speed_de(self, km_h):
         signature = [0x97, 0xf8, 0x51, None, None, 0x23, 0x4f, 0xf4, 0xfa, 0x5a]
@@ -130,6 +130,29 @@ class FirmwarePatcher():
 
         return "speed_limit_speed_de", hex(ofs), pre.hex(), post.hex()
 
+    """
+    --- FOUND AT (DRV173) SECTION ---
+    000070fe 97 f8 52 20     ldrb.w     r2,[r7,#0x52]=>DAT_200007ce
+    00007102 01 2a           cmp        r2,#0x1
+    00007104 0c d0           beq        LAB_00007120
+    00007106 28 22           movs       r2,#0x28
+    
+    ---> Offset: 0x7106
+    """
+    def speed_limit_speed_us(self, km_h):
+        signature = [0x97, 0xf8, 0x52, None, 0x1, 0x2a, None, None, None, 0x22, 0xc2, 0x80]
+        add_offset = 8
+        register = (0x22, 2)
+        instruction_len = 2
+
+        ofs = FindPattern(self.data, signature) + add_offset
+        pre = self.data[ofs:ofs + instruction_len]
+        assert pre[-1] == register[0]
+        post = bytes(self.ks.asm('MOVS R{}, #{}'.format(register[1], km_h))[0])
+        self.data[ofs:ofs + instruction_len] = post
+
+        return "speed_limit_speed_us", hex(ofs), pre.hex(), post.hex()
+
 
 if __name__ == "__main__":
     import sys
@@ -139,6 +162,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) != 4:
         eprint("Usage: {0} <orig-firmware.bin> <target.bin> [patches]".format(sys.argv[0]))
+        eprint("Example: {0} DRV170.bin DRV170_patched.bin sls-de,sls-eu".format(sys.argv[0]))
         exit(1)
 
     infile, outfile, args = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -148,10 +172,10 @@ if __name__ == "__main__":
 
     patcher = FirmwarePatcher(data)
 
-    # comment out to deactivate
     patches = {
-        'sls-eu': lambda: patcher.speed_limit_speed_eu(27),
-        'sls-de': lambda: patcher.speed_limit_speed_de(27)
+        'sls-eu': lambda: patcher.speed_limit_speed_eu(30),
+        'sls-de': lambda: patcher.speed_limit_speed_de(30),
+        'sls-us': lambda: patcher.speed_limit_speed_us(30)
     }
 
     for key in patches:
