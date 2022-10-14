@@ -1,10 +1,10 @@
+#!/usr/bin/python3
 """
 Based on: https://github.com/dnandha/firmware-patcher
 
 This project tries to convert the same project from Xiaomi to Ninebot
 """
 
-#!/usr/bin/python3
 import keystone
 import capstone
 import struct
@@ -99,12 +99,14 @@ class FirmwarePatcher():
         signature = [0x97, 0xf8, 0x51, None, None, 0x23, 0x4f, 0xf4, 0xfa, 0x5a]
         register = 12
         add_offset = 0xa
+        instruction_len = 4
 
         ofs = FindPattern(self.data, signature) + add_offset
-        pre = self.data[ofs:ofs + 4]
+        pre = self.data[ofs:ofs + instruction_len]
         assert pre[-1] == register
-        post = bytes(self.ks.asm('MOVW R{}, #{}'.format(register, km_h))[0])
-        self.data[ofs:ofs + 4] = post
+        post = bytes(self.ks.asm('MOV.W R{}, #{}'.format(register, km_h))[0])
+        assert len(pre) == len(post)
+        self.data[ofs:ofs + instruction_len] = post
 
         return "speed_limit_speed", hex(ofs), pre.hex(), post.hex()
 
