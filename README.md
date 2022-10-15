@@ -20,3 +20,13 @@ SLS: Speed limit of Speed Mode
 - sls-eu (Europe)
 - sls-de (Germany)
 - sls-us (United States)
+
+#### Offets
+SLS: Speed limit of Speed Mode
+- sls-eu: 0x6f2e
+- sls-de: 0x6f28
+- sls-us: 0x7106
+
+#### IN DEVELOPMENT
+RR: Region restrictions
+- Around 0x7aca
