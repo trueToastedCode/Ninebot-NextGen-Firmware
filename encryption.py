@@ -1,11 +1,24 @@
 #!/usr/bin/python3
-import sys
 import os
 from xiaotea import *
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        exit(0)
+    import sys
+
+    def eprint(*args, **kwargs):
+        print(*args, file=sys.stderr, **kwargs)
+
+    if len(sys.argv) < 4 or sys.argv[3].lower() not in ['-enc', '-dec']:
+        eprint("Usage: {0} <source.bin> <destination.bin> <-enc or -dec>".format(sys.argv[0]))
+        eprint("Example: {0} DRV170.bin DRV170.bin.enc -enc".format(sys.argv[0]))
+        exit(1)
+
+    xt = XiaoTea()
+    modes = {
+        '-enc': (lambda d: xt.encrypt(d), 'encrypted'),
+        '-dec': (lambda d: xt.decrypt(d), 'decrypted')
+    }
+
     in_path = sys.argv[1]
     out_path = sys.argv[2] if len(sys.argv) > 2\
                    else in_path + '.out'
@@ -20,9 +33,10 @@ if __name__ == '__main__':
     with open(in_path, 'rb') as infile:
         data = infile.read()
         infile.close()
-    xt = XiaoTea()
-    data = xt.decrypt(data)
+
+    mode = modes[sys.argv[3].lower()]
+    data = mode[0](data)
     with open(out_path, 'wb') as outfile:
         outfile.write(data)
         outfile.close()
-    print(f'Successfully decrypted to \'{out_path}\'')
+    print(f'Successfully {mode[1]} to \'{out_path}\'')
