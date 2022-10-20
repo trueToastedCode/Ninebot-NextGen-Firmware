@@ -16,9 +16,9 @@ Download: [Patched DRV173 with SLS (only applied patch) of 30 km/h](https://gith
 ### Supported Patches
 SLS: Speed limit of Speed Mode
 (patches limit to 30 km/h, customizable in patcher.py)
-- sls-eu (Europe) [Verified]
-- sls-de (Germany) [Verified]
-- sls-us (United States) [Verified]
+- sls-eu (Europe)
+- sls-de (Germany)
+- sls-us (United States)
 
 RP: Region patch
 (Disgard fourth place of real serial number and pretends it's 'S', customizable in patcher.py)
